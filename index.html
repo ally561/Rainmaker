@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rainmaker — Digital Brew</title>
+<style>
+:root{
+  color-scheme: dark;
+  --bg:#0b0f16;
+  --bg2:#0f1520;
+  --panel:#141b28;
+  --panel2:#182130;
+  --border:#242f42;
+  --text:#e8eef7;
+  --muted:#8a97ab;
+  --faint:#5c6883;
+  --accent:#3ddc97;
+  --accent2:#2bb37a;
+  --gold:#e3b23c;
+  --hi:#ff6b6b;
+  --med:#e3a234;
+  --low:#6b7688;
+  --fund:#3ddc97;
+  --lead:#a78bfa;
+  --news:#4aa8ff;
+  --event:#f2994a;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  background:radial-gradient(1200px 600px at 80% -10%, #16233a 0%, var(--bg) 55%);
+  color:var(--text);line-height:1.5;-webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1120px;margin:0 auto;padding:22px 20px 70px}
+header.top{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:18px}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{
+  width:40px;height:40px;border-radius:11px;display:grid;place-items:center;font-size:20px;
+  background:linear-gradient(145deg,var(--accent),var(--accent2));color:#04140d;font-weight:800;
+  box-shadow:0 6px 20px rgba(61,220,151,.28);
+}
+h1{font-size:21px;margin:0;letter-spacing:-.4px;font-weight:700}
+.tagline{font-size:12.5px;color:var(--muted);margin-top:1px}
+.gen{font-size:12px;color:var(--faint);text-align:right}
+.gen b{color:var(--accent)}
+
+/* tabs */
+.tabs{display:flex;gap:6px;background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:6px;margin-bottom:20px;flex-wrap:wrap}
+.tab{
+  flex:1;min-width:130px;border:0;background:transparent;color:var(--muted);cursor:pointer;
+  padding:11px 14px;border-radius:10px;font-size:14px;font-weight:600;transition:.15s;text-align:left;
+  display:flex;flex-direction:column;gap:1px;
+}
+.tab .tsub{font-size:11px;font-weight:500;color:var(--faint)}
+.tab:hover{color:var(--text);background:var(--panel2)}
+.tab.active{background:linear-gradient(145deg,var(--accent),var(--accent2));color:#04140d}
+.tab.active .tsub{color:#0a3d29}
+
+/* stats */
+.stats{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+.stat{background:var(--panel);border:1px solid var(--border);border-radius:13px;padding:12px 16px;flex:1;min-width:120px}
+.stat .n{font-size:23px;font-weight:800;letter-spacing:-.5px}
+.stat .l{font-size:11.5px;color:var(--muted);margin-top:1px}
+.stat .n.hi{color:var(--hi)}
+.stat .n.acc{color:var(--accent)}
+
+/* controls */
+.controls{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
+.controls input[type=search]{
+  flex:1;min-width:220px;padding:10px 13px;border:1px solid var(--border);border-radius:10px;
+  font-size:14px;background:var(--panel);color:var(--text);outline:none;
+}
+.controls input[type=search]:focus{border-color:var(--accent)}
+.chip{border:1px solid var(--border);background:var(--panel);color:var(--muted);padding:7px 12px;border-radius:999px;font-size:12.5px;cursor:pointer;user-select:none;white-space:nowrap;transition:.12s}
+.chip:hover{color:var(--text)}
+.chip.active{background:var(--text);color:var(--bg);border-color:var(--text)}
+
+/* cards */
+.grid{display:grid;grid-template-columns:1fr;gap:12px}
+.card{
+  background:linear-gradient(180deg,var(--panel),var(--bg2));border:1px solid var(--border);
+  border-radius:15px;padding:16px 18px;position:relative;overflow:hidden;transition:.15s;
+}
+.card:hover{border-color:#33415c;transform:translateY(-1px)}
+.card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px}
+.card.hi::before{background:var(--hi)}
+.card.med::before{background:var(--med)}
+.card.low::before{background:var(--low)}
+.chead{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-bottom:7px}
+.company{font-size:16.5px;font-weight:700;letter-spacing:-.2px}
+.loc{font-size:12px;color:var(--faint)}
+.badges{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto;align-items:center}
+.badge{font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:999px;letter-spacing:.3px;text-transform:uppercase}
+.b-fund{background:rgba(61,220,151,.14);color:var(--fund)}
+.b-lead{background:rgba(167,139,250,.16);color:var(--lead)}
+.b-news{background:rgba(74,168,255,.15);color:var(--news)}
+.b-event{background:rgba(242,153,74,.16);color:var(--event)}
+.b-conference{background:rgba(242,153,74,.16);color:var(--event)}
+.pri{font-size:10.5px;font-weight:800;padding:3px 9px;border-radius:999px;letter-spacing:.4px}
+.pri.hi{background:rgba(255,107,107,.16);color:var(--hi)}
+.pri.med{background:rgba(227,162,52,.16);color:var(--med)}
+.pri.low{background:rgba(107,118,136,.18);color:#9aa6ba}
+.ind{display:inline-block;font-size:11px;color:var(--muted);background:var(--panel2);border:1px solid var(--border);padding:2px 9px;border-radius:6px;margin-bottom:8px;text-transform:capitalize}
+.detail{font-size:14px;color:var(--text);margin-bottom:10px}
+.reason{background:rgba(61,220,151,.06);border:1px solid rgba(61,220,151,.2);border-radius:10px;padding:10px 12px;font-size:13.5px;color:#cfe9dd}
+.reason .lbl{display:block;font-size:10.5px;font-weight:800;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
+.foot{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:11px;padding-top:11px;border-top:1px solid var(--border)}
+.contact{font-size:12.5px;color:var(--muted)}
+.contact b{color:var(--text)}
+.contact .li{margin-left:8px;display:inline-flex;align-items:center;gap:4px;color:var(--news);text-decoration:none;font-weight:600;font-size:12px}
+.contact .li:hover{text-decoration:underline}
+.contact .guess{color:var(--faint);font-style:italic}
+.srcrow{font-size:11.5px;color:var(--faint);text-align:right}
+.srcrow a{color:var(--muted);text-decoration:none}
+.srcrow a:hover{color:var(--text);text-decoration:underline}
+.empty{text-align:center;color:var(--faint);padding:46px 20px;background:var(--panel);border:1px dashed var(--border);border-radius:14px}
+
+/* archive */
+.arch-day{background:var(--panel);border:1px solid var(--border);border-radius:13px;margin-bottom:12px;overflow:hidden}
+.arch-head{display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer;user-select:none}
+.arch-head:hover{background:var(--panel2)}
+.arch-date{font-weight:700;font-size:14.5px}
+.arch-meta{font-size:12px;color:var(--muted);margin-left:auto}
+.arch-caret{transition:.2s;color:var(--muted)}
+.arch-day.open .arch-caret{transform:rotate(90deg)}
+.arch-body{display:none;padding:0 16px 16px}
+.arch-day.open .arch-body{display:block}
+.arch-rep{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;margin:12px 0 8px}
+.note{font-size:12px;color:var(--faint);margin-top:26px;border-top:1px solid var(--border);padding-top:15px;line-height:1.6}
+.note b{color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <div class="logo">💥</div>
+      <div>
+        <h1>Rainmaker</h1>
+        <div class="tagline">Digital Brew sales signals — who to call, and why, today.</div>
+      </div>
+    </div>
+    <div class="gen">Report generated<br><b id="gen"></b></div>
+  </header>
+
+  <div class="tabs" id="tabs"></div>
+
+  <div id="repView">
+    <div class="stats" id="stats"></div>
+    <div class="controls">
+      <input type="search" id="q" placeholder="Search company, industry, or contact…">
+      <span class="chip active" data-f="all">All signals</span>
+      <span class="chip" data-f="funding">💰 Funding</span>
+      <span class="chip" data-f="leadership">👤 Leadership</span>
+      <span class="chip" data-f="news">📣 News</span>
+      <span class="chip" data-f="event">📅 Events</span>
+      <span class="chip" data-f="hi">🔥 High priority</span>
+    </div>
+    <div class="grid" id="list"></div>
+  </div>
+
+  <div id="archiveView" style="display:none">
+    <div id="archiveList"></div>
+  </div>
+
+  <div class="note">
+    <b>How Rainmaker works.</b> Each rep gets a feed of local companies and organizations showing a buying trigger — fresh funding, a new marketing leader, expansion news, or a major event. Every card includes a best-guess contact and a LinkedIn link to reach them. Priority reflects fit for video work (fresh budget, a visual or complex product, a brand-new marketing leader, or high networking value). Contacts marked <i>(role — verify)</i> are a best guess by title, not a confirmed name — confirm on LinkedIn before reaching out. Rainmaker refreshes each weekday morning; the prior day's report moves into <b>Archive</b>.
+  </div>
+</div>
+
+<script>
+const DATA = {
+  generated: "2026-07-10",
+  reps: {
+    tech: {
+      name: "Tech",
+      territory: "US & UK — funding & new marketing leaders",
+      signals: [
+        {company:"Prime Intellect",city:"San Francisco, US",industry:"AI",type:"funding",detail:"Raised $130M Series A led by Radical Ventures for distributed AI compute.",date:"2026-07-08",source:"https://news.crunchbase.com/venture/biggest-funding-rounds-ai-energy-biotech-joulent/",sourceName:"Crunchbase News",contact:"VP of Marketing",contactTitle:"VP of Marketing",guess:true,linkedin:"https://www.linkedin.com/search/results/people/?keywords=VP%20Marketing%20Prime%20Intellect",reason:"Fresh $130M and a technically dense product that's hard to explain in text — prime for an explainer/brand film. Tech companies spend the most on video, and a big Series A usually funds a first real brand push.",priority:"hi"},
+        {company:"Norm AI",city:"New York, US",industry:"AI compliance",type:"funding",detail:"Raised $120M Series C led by Khosla Ventures for AI compliance/legal automation.",date:"2026-07-07",source:"https://news.crunchbase.com/venture/biggest-funding-rounds-ai-energy-biotech-joulent/",sourceName:"Crunchbase News",contact:"Head of Marketing",contactTitle:"Head of Marketing",guess:true,linkedin:"https://www.linkedin.com/search/results/people/?keywords=Head%20of%20Marketing%20Norm%20AI",reason:"A Series C scale-up selling a trust-heavy product to enterprises — the moment they invest in polished customer-story and category-education video. Well capitalized for a retainer.",priority:"hi"},
+        {company:"Together AI",city:"San Francisco, US",industry:"AI infrastructure",type:"funding",detail:"Closed an $800M Series C for its open-source AI model-ops platform.",date:"2026-06-05",source:"https://news.crunchbase.com/venture/biggest-funding-rounds-june-5-2026/",sourceName:"Crunchbase News",contact:"VP of Marketing",contactTitle:"VP of Marketing",guess:true,linkedin:"https://www.linkedin.com/search/results/people/?keywords=VP%20Marketing%20Together%20AI",reason:"A massive raise means a large marketing budget and category-leadership ambitions — companies at this stage fund brand campaigns, developer-education series, and event content.",priority:"hi"},
+        {company:"Monzo",city:"London, UK",industry:"fintech",type:"leadership",detail:"Promoted AJ Coyne (ex-Spotify, Klarna) to its first-ever Chief Marketing Officer as revenue rose 39% to £1.7bn.",date:"2026-05-27",source:"https://www.marketingweek.com/monzo-aj-coyne-promotion-first-cmo/",sourceName:"Marketing Week",contact:"AJ Coyne",contactTitle:"Chief Marketing Officer",guess:false,linkedin:"https://www.linkedin.com/in/coyneaj/",reason:"A newly created CMO role at a 15M-customer brand means fresh budget and mandate — a natural moment to pitch brand films and customer-story videos around loyalty and community.",priority:"hi"},
+        {company:"Oxford Quantum Circuits (OQC)",city:"Reading, UK",industry:"quantum computing",type:"funding",detail:"Raised £260M ($350M) Series C led by Bullhound Capital — Europe's largest-ever private quantum round.",date:"2026-06-03",source:"https://oqc.tech/company/newsroom/series-c",sourceName:"OQC Newsroom",contact:"Head of Marketing / Brand",contactTitle:"Head of Marketing / Brand",guess:true,linkedin:"https://www.linkedin.com/search/results/people/?keywords=Head%20of%20Marketing%20Oxford%20Quantum%20Circuits",reason:"A record round and a hard-to-explain superconducting-quantum product make a perfect explainer/brand-film opportunity — they now have global data-centre customers to educate.",priority:"hi"},
+        {company:"PhysicsX",city:"London, UK",industry:"AI",type:"funding",detail:"Raised £225M ($300M) Series C led by Temasek at a ~$2.4B valuation to scale its AI-native engineering platform.",date:"2026-06-09",source:"https://www.uktech.news/ai/physicsx-raises-225m-to-accelerate-ai-for-industrial-engineering-20260609",sourceName:"UKTN",contact:"VP of Marketing",contactTitle:"VP of Marketing",guess:true,linkedin:"https://www.linkedin.com/search/results/people/?keywords=VP%20Marketing%20PhysicsX",reason:"Fresh mega-round, doubling headcount, and a visually rich physics-simulation product ideal for product-demo and brand films as they scale into US/Singapore markets.",priority:"hi"},
+        {company:"Partly",city:"London, UK",industry:"AI",type:"funding",detail:"Raised £38M Series B from DST Global Partners to take its automotive-parts AI to the US.",date:"2026-06-24",source:"https://www.uktech.news/ai/partly-secures-38m-to-take-ai-for-the-automotive-sector-to-the-us-20260624",sourceName:"UKTN",contact:"VP of Marketing",contactTitle:"VP of Marketing",guess:true,linkedin:"https://www.linkedin.com/search/results/people/?keywords=VP%20Marketing%20Partly",reason:"A US market-entry push with fresh Series B cash creates immediate need for a launch/explainer video to introduce its AI to American collision networks.",priority:"hi"},
+        {company:"Five9",city:"San Ramon, US",industry:"cloud CX",type:"leadership",detail:"Hired Jay Lee as CMO & Growth Officer — a newly created role (from Icertis).",date:"2026-04-06",source:"https://www.marketingdive.com/",sourceName:"Marketing Dive",contact:"Jay Lee",contactTitle:"CMO & Growth Officer",guess:false,linkedin:"https://www.linkedin.com/search/results/people/?keywords=Jay%20Lee%20Five9",reason:"A brand-new C-level marketing seat means a fresh vendor slate and a leader eager to show early wins — the most receptive moment for a new video partner.",priority:"hi"},
+        {company:"Bespoke Labs",city:"US",industry:"AI",type:"funding",detail:"Raised $40M Series A to build environments for AI-agent testing.",date:"2026-07-01",source:"https://techstartups.com/2026/07/01/venture-capital-startup-funding-roundup-july-1-2026/",sourceName:"Tech Startups",contact:"Head of Marketing",contactTitle:"Head of Marketing",guess:true,linkedin:"https://www.linkedin.com/search/results/people/?keywords=Head%20of%20Marketing%20Bespoke%20Labs",reason:"An abstract developer product that needs clear explanation — a classic explainer-video use case, with fresh Series A budget to spend on positioning.",priority:"med"},
+        {company:"Isometric",city:"London, UK",industry:"climate tech",type:"funding",detail:"Raised £30M+ Series A (AVP, Lowercarbon, Plural) to expand its AI carbon-removal certification platform.",date:"2026-06-22",source:"https://www.uktech.news/ai/isometric-raises-over-30m-to-expand-ai-certification-platform-20260622",sourceName:"UKTN",contact:"Head of Marketing",contactTitle:"Head of Marketing",guess:true,linkedin:"https://www.linkedin.com/search/results/people/?keywords=Head%20of%20Marketing%20Isometric%20carbon",reason:"Carbon-removal verification is abstract and trust-driven — a strong fit for an explainer video and customer-story content that builds credibility with buyers and regulators post-raise.",priority:"med"},
+        {company:"EquiLibre Technologies",city:"US",industry:"AI / deep tech",type:"funding",detail:"Raised a Series A at a $500M+ valuation led by Creandum.",date:"2026-06-30",source:"https://www.blog.technyc.org/news/series-a-june-2026",sourceName:"Tech:NYC",contact:"Head of Marketing",contactTitle:"Head of Marketing",guess:true,linkedin:"https://www.linkedin.com/search/results/people/?keywords=Head%20of%20Marketing%20EquiLibre%20Technologies",reason:"A half-billion valuation on a Series A signals big ambitions and budget — likely building out a first marketing function, a good time to become the video partner they standardize on.",priority:"med"},
+        {company:"Hiscox",city:"London, UK",industry:"insurtech",type:"leadership",detail:"Appointed Aparna Sarin (ex-Capital One, Amex) as its first Group Chief Marketing & Revenue Officer.",date:"2026-07-01",source:"https://www.insurancetimes.co.uk/news/hiscox-appoints-first-chief-marketing-and-revenue-officer/1458995.article",sourceName:"Insurance Times",contact:"Aparna Sarin",contactTitle:"Group Chief Marketing & Revenue Officer",guess:false,linkedin:"https://www.linkedin.com/search/results/people/?keywords=Aparna%20Sarin%20Hiscox",reason:"A brand-new, first-of-its-kind CMRO will be shaping brand and growth strategy from day one — an ideal window to introduce brand-film and campaign video capabilities.",priority:"med"},
+        {company:"Pattern",city:"Lehi, US",industry:"ecommerce SaaS",type:"leadership",detail:"Named Chris Baird (ex-Weave) as new CMO.",date:"2026-04-06",source:"https://www.marketingdive.com/",sourceName:"Marketing Dive",contact:"Chris Baird",contactTitle:"Chief Marketing Officer",guess:false,linkedin:"https://www.linkedin.com/search/results/people/?keywords=Chris%20Baird%20Pattern",reason:"A new CMO typically re-evaluates agencies and content strategy early, and ecommerce platforms lean heavily on product and customer-story video.",priority:"med"},
+        {company:"LinqAlpha",city:"New York, US",industry:"agentic AI",type:"funding",detail:"Raised $22M Series A for agentic AI in market intelligence.",date:"2026-07-01",source:"https://techstartups.com/2026/07/01/venture-capital-startup-funding-roundup-july-1-2026/",sourceName:"Tech Startups",contact:"Head of Marketing",contactTitle:"Head of Marketing",guess:true,linkedin:"https://www.linkedin.com/search/results/people/?keywords=Head%20of%20Marketing%20LinqAlpha",reason:"Early growth stage, complex product, fresh capital — the right size for a first brand or product-explainer video engagement.",priority:"med"},
+        {company:"geoSurge",city:"London, UK",industry:"martech / AI",type:"funding",detail:"Raised a £9.4M round to scale its AI search-visibility (GEO) platform.",date:"2026-07-03",source:"https://www.uktech.news/ai/ai-search-visibility-startup-geosurge-scores-9-4m-round-20260703",sourceName:"UKTN",contact:"Head of Marketing",contactTitle:"Head of Marketing",guess:true,linkedin:"https://www.linkedin.com/search/results/people/?keywords=Head%20of%20Marketing%20geoSurge",reason:"A marketing-tech company that just raised will spend on its own brand — a very recent round makes it prime for an explainer or product-demo video to win marketer buyers.",priority:"med"},
+        {company:"LifeMD",city:"New York, US",industry:"telehealth",type:"leadership",detail:"Promoted Chris Pisano to Chief Marketing Officer.",date:"2026-04-01",source:"https://www.sec.gov/Archives/edgar/data/0000948320/000149315226020419/formdef14a.htm",sourceName:"SEC filing",contact:"Chris Pisano",contactTitle:"Chief Marketing Officer",guess:false,linkedin:"https://www.linkedin.com/search/results/people/?keywords=Chris%20Pisano%20LifeMD",reason:"A new CMO at a consumer-facing health brand — a category that runs on performance and brand video. Recently elevated leaders often expand their content budgets.",priority:"med"},
+        {company:"StirlingX",city:"London, UK",industry:"defence tech",type:"funding",detail:"Raised £15M to scale its sovereign data-intelligence platform.",date:"2026-07-02",source:"https://www.uktech.news/defence-tech/stirlingx-raises-15m-to-scale-sovereign-data-intelligence-platform-20260702",sourceName:"UKTN",contact:"VP of Marketing",contactTitle:"VP of Marketing",guess:true,linkedin:"https://www.linkedin.com/search/results/people/?keywords=VP%20Marketing%20StirlingX",reason:"A very recent raise plus a complex, sensitive product is a fit for a controlled explainer/brand film to build trust with government and enterprise buyers.",priority:"med"},
+        {company:"Astral Systems",city:"Bristol, UK",industry:"fusion energy",type:"funding",detail:"Raised £23M Series A to scale modular fusion reactors producing medical radioisotopes.",date:"2026-06-24",source:"https://www.uktech.news/deep-tech/astral-systems-raises-23m-to-scale-its-nuclear-fusion-technology-20260624",sourceName:"UKTN",contact:"Head of Communications",contactTitle:"Head of Marketing / Communications",guess:true,linkedin:"https://www.linkedin.com/search/results/people/?keywords=Head%20of%20Communications%20Astral%20Systems%20fusion",reason:"Fusion reactors for cancer-treatment isotopes are visually spectacular and mission-driven — ideal for a brand film/explainer to attract talent, partners, and future capital.",priority:"med"},
+        {company:"Pie",city:"US",industry:"SaaS",type:"funding",detail:"Raised $19.5M Series A led by Lightspeed Venture Partners.",date:"2026-06-30",source:"https://www.blog.technyc.org/news/series-a-june-2026",sourceName:"Tech:NYC",contact:"VP of Marketing",contactTitle:"VP of Marketing",guess:true,linkedin:"https://www.linkedin.com/search/results/people/?keywords=VP%20Marketing%20Pie",reason:"Well-backed Series A with a top-tier lead investor — growth-stage SaaS at this point typically invests in launch and demand-gen video.",priority:"med"},
+        {company:"E.l.f. Brands",city:"Oakland, US",industry:"consumer brand",type:"leadership",detail:"Named Oshiya Savur as Chief Marketing Officer.",date:"2026-05-15",source:"https://www.marketingdive.com/news/elf-promotes-longtime-cmo-kory-marchisotto-to-president/817931/",sourceName:"Marketing Dive",contact:"Oshiya Savur",contactTitle:"Chief Marketing Officer",guess:false,linkedin:"https://www.linkedin.com/search/results/people/?keywords=Oshiya%20Savur%20elf",reason:"A new CMO at a heavily video-driven consumer brand — beauty marketing is social-video-first, so a new leader means a new content vision and likely new production partners.",priority:"med"},
+        {company:"Luxonis",city:"Colorado, US",industry:"robotics hardware",type:"funding",detail:"Raised $14M Series A for AI perception hardware used in robotics and industrial automation.",date:"2026-07-01",source:"https://techstartups.com/2026/07/01/venture-capital-startup-funding-roundup-july-1-2026/",sourceName:"Tech Startups",contact:"Head of Marketing",contactTitle:"Head of Marketing",guess:true,linkedin:"https://www.linkedin.com/search/results/people/?keywords=Head%20of%20Marketing%20Luxonis",reason:"Hardware and robotics sell on video. Smaller round, so lead with a focused product demo or launch reel rather than a full brand package.",priority:"low"},
+        {company:"Trimtech Therapeutics",city:"Cambridge, UK",industry:"biotech",type:"funding",detail:"Closed a £35.6M Seed round (J&J JJDC, BGF, Cambridge Innovation Capital) for blood-brain-barrier protein degraders.",date:"2026-06-23",source:"https://www.uktech.news/biotech/new-funding-takes-trimtech-therapeutics-seed-round-to-35-6m-20260623",sourceName:"UKTN",contact:"Head of Communications",contactTitle:"Head of Communications / Marketing",guess:true,linkedin:"https://www.linkedin.com/search/results/people/?keywords=Head%20of%20Communications%20Trimtech%20Therapeutics",reason:"An unusually large seed with blue-chip backers signals appetite to build brand and investor-story video explaining its science for future rounds and partnerships.",priority:"low"}
+      ]
+    },
+    nathan: {
+      name: "Nathan",
+      territory: "Central Florida — Orlando · Tampa · Jacksonville",
+      signals: [
+        {company:"Orlando Health",city:"Orlando",industry:"healthcare",type:"leadership",detail:"Named Andrew J. Snyder as SVP of Marketing & Communications, overseeing brand, web and social strategy.",date:"2026-03-01",source:"https://www.orlandohealth.com/content-hub/3-new-executives",sourceName:"Orlando Health",contact:"Andrew J. Snyder",contactTitle:"SVP, Marketing & Communications",guess:false,linkedin:"https://www.linkedin.com/search/results/people/?keywords=Andrew%20Snyder%20Orlando%20Health",reason:"A brand-new senior marketing/comms leader at a major health system is the strongest video trigger there is — fresh mandate and budget for brand films, patient stories, and physician-recruiting content. Reach out while he's setting his 2026 agenda.",priority:"hi"},
+        {company:"AdventHealth",city:"Lake Nona / Orlando",industry:"healthcare",type:"news",detail:"Building a $423M 10-story 'hospital of the future' at Lake Nona with robotic/incisionless surgery, opening Nov 30, 2026.",date:"2025-12-12",source:"https://www.connectcre.com/stories/adventhealth-adding-423m-lake-nona-hospital/",sourceName:"Connect CRE",contact:"VP Marketing/Communications, AdventHealth Central FL",contactTitle:"VP Marketing/Communications",guess:true,linkedin:"https://www.linkedin.com/search/results/people/?keywords=AdventHealth%20Central%20Florida%20marketing",reason:"A high-tech, highly visual new hospital opening in Q4 is a natural fit for a facility brand film, explainer videos on the new surgical tech, and grand-opening coverage — all commissioned in the pre-opening window.",priority:"hi"},
+        {company:"TENEX.AI",city:"Tampa Bay (Sarasota)",industry:"technology",type:"funding",detail:"Raised $250M in Mar 2026 (crossed unicorn status), opening its world HQ in Tampa Bay and hiring up to 100.",date:"2026-03-31",source:"https://www.businessobserverfl.com/news/2026/mar/31/sarasota-cybersecurity-firm-funding/",sourceName:"Business Observer",contact:"Head of Marketing / CMO, TENEX.AI",contactTitle:"CMO / Head of Marketing",guess:true,linkedin:"https://www.linkedin.com/search/results/people/?keywords=TENEX.AI%20marketing",reason:"Fresh megaround plus aggressive local hiring is top-tier: budget for an explainer on their complex AI-security platform, recruiting videos to hit the 100-hire goal, and brand storytelling. Move fast while capital is fresh.",priority:"hi"},
+        {company:"Visit Orlando / Orlando Economic Partnership",city:"Orlando",industry:"hospitality",type:"news",detail:"Unveiled Orlando's new global destination brand, 'Unbelievably Real' — a joint rebrand.",date:"2026-04-01",source:"https://news.orlando.org/blog/visit-orlando-and-orlando-economic-partnership-unveil-orlandos-new-global-brand-unbelievably-real-orlando/",sourceName:"Orlando Economic Partnership",contact:"Chief Marketing Officer, Visit Orlando",contactTitle:"Chief Marketing Officer",guess:true,linkedin:"https://www.linkedin.com/search/results/people/?keywords=Visit%20Orlando%20chief%20marketing%20officer",reason:"A fresh destination rebrand is exactly when a DMO commissions brand films, campaign spots, and partner co-op video. High visual budget and an active creative cycle make this a top target.",priority:"hi"},
+        {company:"JAXPORT",city:"Jacksonville",industry:"logistics",type:"news",detail:"Touted its 'Jax Forward' strategy at the 2026 State of the Port — a $250M Blount Island modernization plus a new direct Asia container service launching May 2026.",date:"2026-02-26",source:"https://www.jaxport.com/jaxport-highlights-infrastructure-progress-and-long-term-strategy-at-2026-state-of-the-port/",sourceName:"JAXPORT",contact:"Director of Marketing & Communications, JAXPORT",contactTitle:"Director Marketing/Communications",guess:true,linkedin:"https://www.linkedin.com/search/results/people/?keywords=JAXPORT%20marketing%20communications",reason:"Ports invest heavily in economic-impact and infrastructure story videos to court shippers; the 'Jax Forward' rollout and new Asia lane are a clear hook for a brand/explainer video and event recap. Public authorities routinely budget for this.",priority:"hi"},
+        {company:"IAAPA Expo",city:"Orlando",industry:"events",type:"event",detail:"IAAPA Expo 2026 (global attractions industry) runs Nov 16–20 at the Orange County Convention Center; 2025 set record attendance.",date:"2026-11-16",source:"https://iaapa.org/about/press-room/press-release-iaapa-expo-2026-registration-opens",sourceName:"IAAPA",contact:"Director of Marketing/Communications, IAAPA",contactTitle:"Director Marketing/Communications",guess:true,linkedin:"https://www.linkedin.com/search/results/people/?keywords=IAAPA%20marketing%20communications",reason:"The attractions industry is intensely video-hungry; IAAPA Expo draws hundreds of exhibitors needing booth/sizzle reels, plus the organizer needs recap/promo video. Approach both IAAPA and exhibitors ahead of November.",priority:"hi"},
+        {company:"TSOLife",city:"Tampa",industry:"healthcare",type:"funding",detail:"Closed a $43M Series B led by PeakSpan Capital to expand its AI resident-insight platform for senior living.",date:"2025-05-07",source:"https://www.businessobserverfl.com/news/2025/may/07/tampa-senior-living-tech-platform-funding/",sourceName:"Business Observer",contact:"VP of Marketing, TSOLife",contactTitle:"VP Marketing",guess:true,linkedin:"https://www.linkedin.com/search/results/people/?keywords=TSOLife%20marketing",reason:"A funded health-tech company with an AI product and marquee senior-living customers is ideal for a product explainer and customer-story videos proving ROI to operators. Capital is deployed toward growth.",priority:"hi"},
+        {company:"Baptist Health",city:"Jacksonville",industry:"healthcare",type:"leadership",detail:"Appointed Matthew A. Zuino as President & CEO, succeeding retiring CEO Michael Mayo.",date:"2026-01-17",source:"https://southfloridahospitalnews.com/matt-zuino-named-chief-executive-officer-of-baptist-health-jacksonville/",sourceName:"FL Hospital News",contact:"Matthew A. Zuino",contactTitle:"President & CEO",guess:false,linkedin:"https://www.linkedin.com/search/results/people/?keywords=Matthew%20Zuino%20Baptist%20Health",reason:"A new CEO at the region's largest health system often drives a refreshed brand narrative — opportunity for a CEO vision film and system storytelling. Reach out early in his tenure (or via his VP Marketing).",priority:"med"},
+        {company:"Tampa General Hospital",city:"Tampa",industry:"healthcare",type:"news",detail:"Opened a 32,000-sq-ft Innovation Center in Ybor City anchoring the Tampa Medical & Research District, with TGH Ventures and a Palantir presence.",date:"2026-02-10",source:"https://www.businessobserverfl.com/news/2026/feb/10/tgh-open-innovation-center-ybor-city/",sourceName:"Business Observer",contact:"VP of Marketing & Communications, TGH",contactTitle:"VP Marketing/Communications",guess:true,linkedin:"https://www.linkedin.com/search/results/people/?keywords=Tampa%20General%20Hospital%20marketing",reason:"A brand-new innovation hub with a venture arm and tech partners is ripe for an explainer/brand film on the district and startup customer-story videos. Timely while the center is still being introduced.",priority:"med"},
+        {company:"Villatel",city:"Orlando",industry:"hospitality",type:"news",detail:"Launched a multi-brand luxury hospitality platform in Orlando, using the city as its base for national expansion.",date:"2026-04-01",source:"https://www.travelandtourworld.com/news/article/fxjb97zyyvpy/",sourceName:"Travel And Tour World",contact:"Head of Marketing/Brand, Villatel",contactTitle:"Head of Marketing/Brand",guess:true,linkedin:"https://www.linkedin.com/search/results/people/?keywords=Villatel%20marketing",reason:"A brand-new multi-brand platform launch is a classic brand-film and property-showcase opportunity — luxury vacation rentals sell on visual storytelling, and they're in expansion mode with budget to build the identity.",priority:"med"},
+        {company:"IHG (EVEN Hotel + Staybridge Suites)",city:"Orlando",industry:"hospitality",type:"news",detail:"Opened a dual-branded 288-room hotel on Universal Blvd near Epic Universe and the convention center.",date:"2026-05-01",source:"https://www.travelandtourworld.com/news/article/tqk2lzmah9yp/",sourceName:"Travel And Tour World",contact:"General Manager / Regional Marketing",contactTitle:"GM / Marketing",guess:true,linkedin:"https://www.linkedin.com/search/results/people/?keywords=EVEN%20Hotel%20Staybridge%20Orlando%20Universal",reason:"A brand-new hotel near Epic Universe needs property-showcase video, amenity walkthroughs, and social promo to fill rooms in a competitive corridor. The new-open window is prime for commissioning.",priority:"med"},
+        {company:"BayCare Health System",city:"Tampa",industry:"healthcare",type:"news",detail:"Acquired a 36-acre parcel to establish a HQ for its graduate medical education and research programs.",date:"2026-03-01",source:"https://www.dotmed.com/news/story/64327",sourceName:"DOTmed News",contact:"VP of Marketing/Brand, BayCare",contactTitle:"VP Marketing",guess:true,linkedin:"https://www.linkedin.com/search/results/people/?keywords=BayCare%20Health%20marketing",reason:"A new research/GME headquarters means residency-recruiting films and research-showcase videos. Good timing as the campus vision is being communicated.",priority:"med"},
+        {company:"EXHIBITORLIVE / Tampa Convention Center",city:"Tampa",industry:"events",type:"event",detail:"Tampa Convention Center hosted EXHIBITORLIVE 2026 (~2,000 top trade-show pros); the TCC projects 326,290 attendees across 101 events in 2026.",date:"2026-03-01",source:"https://www.tampa.gov/news/2026-04/setting-industry-standard-exhibitorlive-2026-proves-why-worlds-top-event-planners",sourceName:"City of Tampa",contact:"Director of Sales & Marketing, TCC",contactTitle:"Director of Sales & Marketing",guess:true,linkedin:"https://www.linkedin.com/search/results/people/?keywords=Tampa%20Convention%20Center%20marketing",reason:"The convention center markets aggressively to planners (venue promo/testimonial video), and its calendar is a pipeline of exhibitors needing booth and recap video. A TCC relationship opens repeat work.",priority:"med"},
+        {company:"Blue Origin",city:"Space Coast (near Orlando)",industry:"manufacturing",type:"news",detail:"Announced a $600M 'Project Horizon' expansion — an 830,000-sq-ft New Glenn facility creating ~500 high-wage jobs.",date:"2026-05-22",source:"https://www.spaceflorida.gov/news/governor-ron-desantis-announces-600m-blue-origin-manufacturing-expansion-500-high-wage-jobs",sourceName:"Space Florida",contact:"Communications / Employer Brand, Blue Origin",contactTitle:"Communications / Employer Brand",guess:true,linkedin:"https://www.linkedin.com/search/results/people/?keywords=Blue%20Origin%20communications%20Florida",reason:"500 high-wage jobs and a massive new plant call for recruiting video and a manufacturing brand film. Highly visual aerospace subject and an immediate hiring push — though enterprise procurement may be centralized.",priority:"med"},
+        {company:"Pierce Manufacturing",city:"Bradenton (near Tampa)",industry:"manufacturing",type:"news",detail:"Investing $150M in a 185,000-sq-ft production/training building near its Bradenton campus, operational mid-2026.",date:"2026-02-23",source:"https://www.businessobserverfl.com/news/2026/feb/23/manatee-manufacturer-expands/",sourceName:"Business Observer",contact:"Marketing/Communications Manager, Pierce",contactTitle:"Marketing/Communications Manager",guess:true,linkedin:"https://www.linkedin.com/search/results/people/?keywords=Pierce%20Manufacturing%20marketing",reason:"A major facility expansion with training space supports a facility-tour brand film, hiring/onboarding videos, and process/product demos. Reach out ahead of the mid-2026 opening.",priority:"med"},
+        {company:"MegaCon Orlando",city:"Orlando",industry:"events",type:"event",detail:"Among North America's largest fan conventions (Mar 19–22, 2026), with reported attendance near 200,000 at the OCCC.",date:"2026-03-19",source:"https://en.wikipedia.org/wiki/MegaCon",sourceName:"Wikipedia",contact:"Marketing Manager, Fan Expo / MegaCon",contactTitle:"Marketing Manager",guess:true,linkedin:"https://www.linkedin.com/search/results/people/?keywords=MegaCon%20Orlando%20marketing",reason:"A 200K-attendee event is a strong candidate for high-energy recap/promo video and sponsor content — best pitched as recurring annual coverage, though a large national operator may already have vendors.",priority:"med"},
+        {company:"Intercontinental Exchange (ICE)",city:"Jacksonville",industry:"financial",type:"news",detail:"Investing $173M+ to expand in Jacksonville, home to its mortgage-technology division HQ (ongoing build-out).",date:"2024-12-17",source:"https://jaxtoday.org/2024/12/17/ice-expansion-jacksonville/",sourceName:"Jacksonville Today",contact:"Communications / Employer Brand, ICE Mortgage Tech",contactTitle:"Communications / Employer Brand",guess:true,linkedin:"https://www.linkedin.com/search/results/people/?keywords=ICE%20Mortgage%20Technology%20Jacksonville%20communications",reason:"A large fintech HQ build-out and hiring supports recruiting and employer-brand video. Note: original announcement is from 2024, so this is an ongoing (not fresh) signal, and procurement is likely centralized.",priority:"low"}
+      ]
+    },
+    david: {
+      name: "David",
+      territory: "Austin, TX — enterprise tech, events & key industries",
+      signals: [
+        {company:"Apptronik",city:"Austin",industry:"enterprise tech",type:"funding",detail:"Humanoid-robotics maker raised a $520M Series A extension at a ~$5B valuation (backers incl. Google, Mercedes-Benz, John Deere); scaling Apollo robot production in Austin.",date:"2026-02-11",source:"https://www.cnbc.com/2026/02/11/apptronik-raises-520-million-at-5-billion-valuation-for-apollo-robot.html",sourceName:"CNBC",contact:"Barry Phillips",contactTitle:"Chief Commercial Officer (Sales, Marketing, BizDev)",guess:false,linkedin:"https://www.linkedin.com/in/phillipsbarry/",reason:"Fresh half-billion in capital plus a humanoid robot with huge visual appeal is a prime fit for brand films, product/demo videos, and factory-floor customer stories. Reach Phillips while the launch narrative and spend are ramping.",priority:"hi"},
+        {company:"Q.ANT",city:"Austin",industry:"enterprise tech",type:"news",detail:"German photonic-computing firm opened its U.S. HQ in Austin and appointed ex-IBM exec Bruno Spruth as CTO for North America.",date:"2026-04-23",source:"https://thequantuminsider.com/2026/04/23/qant-photonic-computing-us-bruno-spruth-cto/",sourceName:"The Quantum Insider",contact:"Bruno Spruth",contactTitle:"CTO, North America",guess:false,linkedin:"https://www.linkedin.com/search/results/people/?keywords=Bruno%20Spruth%20Q.ANT",reason:"A brand-new U.S. HQ means Q.ANT must introduce a complex, invisible technology to an American enterprise audience — exactly the explainer-video and brand-film problem Digital Brew solves. Get in before they pick an agency.",priority:"hi"},
+        {company:"Function Health",city:"Austin",industry:"healthcare",type:"funding",detail:"Raised a $298M Series B at a $2.5B valuation, launched its Medical Intelligence Lab, and dropped membership to $365/yr to scale sign-ups.",date:"2025-11-19",source:"https://techcrunch.com/2025/11/19/function-health-closes-298m-series-b-at-a-2-5b-valuation-launches-medical-intelligence/",sourceName:"TechCrunch",contact:"VP / Head of Brand Marketing",contactTitle:"Brand/Marketing decision-maker",guess:true,linkedin:"https://www.linkedin.com/search/results/people/?keywords=Function%20Health%20brand%20marketing",reason:"A consumer-health unicorn lowering price to scale membership needs high-volume explainer and customer-story video to drive sign-ups. Deep-pocketed, marketing-heavy buyer — pitch now.",priority:"hi"},
+        {company:"Sensi.AI",city:"Austin",industry:"healthcare",type:"funding",detail:"Senior-care AI company raised a $45M Series C led by Qumra Capital, expanding go-to-market as an 'AI Operating System for Senior Care.'",date:"2025-10-15",source:"https://www.mcknightsseniorliving.com/news/sensi-ai-raises-45m-series-c-funding-to-advance-product-innovation-go-to-market-efforts/",sourceName:"McKnight's",contact:"Romi Gubes",contactTitle:"CEO & Co-founder",guess:false,linkedin:"https://www.linkedin.com/search/results/people/?keywords=Romi%20Gubes%20Sensi",reason:"Explicit go-to-market expansion plus an emotional, story-rich category (elder care) is ideal for customer-story and explainer video. Reach Gubes/marketing while GTM budget is being deployed.",priority:"hi"},
+        {company:"Ownwell",city:"Austin",industry:"financial",type:"funding",detail:"Property-tax-appeal fintech raised a $50M Series B, launching a national AI-powered appeals service.",date:"2026-02-19",source:"https://www.prnewswire.com/news-releases/ownwell-raises-50m-launches-national-service-to-streamline-property-tax-appeals-and-make-home-ownership-more-affordable-302692103.html",sourceName:"PR Newswire",contact:"Head of Marketing / Growth",contactTitle:"Marketing/Growth lead",guess:true,linkedin:"https://www.linkedin.com/search/results/people/?keywords=Ownwell%20head%20of%20marketing",reason:"A fintech launching a nationwide consumer service needs explainer video to demystify property-tax appeals and drive acquisition. Fresh capital plus national expansion = active marketing spend.",priority:"hi"},
+        {company:"ShipStation Global (WWEX + Auctane)",city:"Austin",industry:"logistics",type:"news",detail:"WWEX Group and Auctane merged to create ShipStation Global, an AI logistics platform serving 3M+ customers, with an Austin office.",date:"2026-06-01",source:"https://www.businesswire.com/news/home/20260601317355/en/WWEX-Group-and-Auctane-Complete-Merger-Creating-Leading-Logistics-Provider-ShipStation-Global",sourceName:"Business Wire",contact:"CMO / VP Brand",contactTitle:"Marketing decision-maker",guess:true,linkedin:"https://www.linkedin.com/search/results/people/?keywords=ShipStation%20Global%20marketing",reason:"A fresh merger means a rebrand and a unified brand story — textbook brand-film and product-video work. Reach out during the post-merger identity-building window.",priority:"hi"},
+        {company:"Austin Tech Week 2026",city:"Austin",industry:"conference",type:"conference",detail:"Five-day celebration of Austin's tech ecosystem (Oct 26–30, 2026); cost not listed — many sessions historically free/host-sponsored (confirm on site).",date:"2026-10-26",source:"https://www.austintech.com/",sourceName:"Austin Tech Week",contact:"Austin Tech Week organizing team",contactTitle:"Event organizers",guess:true,linkedin:"",reason:"A citywide, multi-venue week is a dense networking opportunity plus a natural event-coverage/highlight-reel angle Digital Brew could pitch to sponsors or the organizers. High-value week for David to work.",priority:"hi"},
+        {company:"NinjaOne",city:"Austin",industry:"enterprise tech",type:"funding",detail:"Endpoint-management/security platform secured $500M in Series C extensions at a $5B valuation (led by ICONIQ Growth, CapitalG); later reporting points to a further raise near $12.3B.",date:"2025-02-24",source:"https://www.ninjaone.com/press/500m-series-c-extensions-5b-valuation/",sourceName:"NinjaOne",contact:"VP of Marketing / Brand",contactTitle:"Marketing decision-maker",guess:true,linkedin:"https://www.linkedin.com/search/results/people/?keywords=NinjaOne%20VP%20Marketing",reason:"A fast-scaling, well-capitalized SaaS leader with an acquisition to integrate needs product-demo and customer-story videos to explain 'autonomous endpoint management.' High-budget enterprise buyer worth a targeted pitch.",priority:"med"},
+        {company:"Toyota Motor North America",city:"San Antonio (metro-adjacent)",industry:"manufacturing",type:"news",detail:"Announced a $3.6B expansion of its San Antonio plant (2,000 new jobs, +2.5M sq ft) to add a second Tacoma production line.",date:"2026-07-06",source:"https://pressroom.toyota.com/toyota-announces-3-6b-expansion-2000-new-jobs-at-its-san-antonio-plant/",sourceName:"Toyota Newsroom",contact:"Plant / Regional Communications lead",contactTitle:"Corporate communications / employer-brand",guess:true,linkedin:"https://www.linkedin.com/search/results/people/?keywords=Toyota%20Texas%20communications",reason:"A $3.6B expansion with 2,000 hires drives recruiting/employer-brand video and facility/community-story content. Just south of the Austin metro — a large, brand-conscious manufacturer worth pursuing.",priority:"med"},
+        {company:"Future Secure AI",city:"Austin",industry:"enterprise tech",type:"news",detail:"Relocated its global HQ to Austin as its primary center for product, engineering, AI ops and executive leadership.",date:"2026-05-01",source:"https://www.citybiz.co/article/839886/future-secure-ai-relocates-global-headquarters-to-austin-as-enterprise-demand-accelerates/",sourceName:"citybiz",contact:"Head of Marketing",contactTitle:"Marketing/Brand lead",guess:true,linkedin:"https://www.linkedin.com/search/results/people/?keywords=Future%20Secure%20AI%20marketing",reason:"A company planting a new global HQ and scaling enterprise demand typically invests in fresh brand and explainer content to establish its Austin identity. Good timing for an intro before budgets lock.",priority:"med"},
+        {company:"3billion US",city:"Austin",industry:"healthcare",type:"news",detail:"Rare-disease genomics company approved for its first North American location in Austin ($8.1M investment, ~200 jobs) starting H2 2026.",date:"2026-06-15",source:"https://www.austintexas.gov/economic-development/news/council-approves-global-genomics-company-expansion-austin-81m-investment",sourceName:"AustinTexas.gov",contact:"Site / Marketing lead, North America",contactTitle:"Marketing/communications lead",guess:true,linkedin:"https://www.linkedin.com/search/results/people/?keywords=3billion%20genomics%20marketing",reason:"A genomics firm entering the U.S. must explain complex science to patients and clinicians (explainer video) and will hire/announce locally, creating employer-brand video needs.",priority:"med"},
+        {company:"Austin Startup Meetup",city:"Austin",industry:"networking event",type:"event",detail:"Long-running founder/operator networking event; next session listed Mon Aug 3, 2026 at 6:00 PM CDT.",date:"2026-08-03",source:"https://www.austinstartupmeetup.com/",sourceName:"Austin Startup Meetup",contact:"Event organizer (host)",contactTitle:"Meetup organizer",guess:true,linkedin:"",reason:"Newly funded founders needing brand and explainer video congregate here — David can meet early-stage marketing buyers before they engage an agency.",priority:"med"},
+        {company:"LinkedIn Local Austin",city:"Austin",industry:"networking event",type:"event",detail:"Recurring in-person professional networking mixer; next listed Tue Jul 28, 2026 at 6:00 PM CDT.",date:"2026-07-28",source:"https://www.meetup.com/find/us--tx--austin/professional-networking/",sourceName:"Meetup",contact:"Event organizer (host)",contactTitle:"Meetup organizer",guess:true,linkedin:"",reason:"A broad cross-industry crowd of Austin professionals — an ideal room for David to work face-to-face and source marketing contacts across sectors.",priority:"med"},
+        {company:"GLS US",city:"Austin",industry:"logistics",type:"news",detail:"Parcel carrier expanded its regional delivery network into Austin and San Antonio, adding dedicated teams for Texas shippers.",date:"2026-04-01",source:"https://www.einnews.com/amp/pr_news/920833846/gls-us-strengthens-texas-network-with-austin-and-san-antonio-expansion",sourceName:"EIN Presswire",contact:"Regional Marketing/Communications lead",contactTitle:"Marketing/communications",guess:true,linkedin:"https://www.linkedin.com/search/results/people/?keywords=GLS%20US%20marketing",reason:"Market entry into Austin creates demand for local brand-awareness and service-explainer video aimed at Texas shippers — timely, though a smaller marketing budget than a fresh-funded startup.",priority:"low"},
+        {company:"Arm",city:"Austin",industry:"enterprise tech",type:"news",detail:"Won a $4.16M state grant to expand its Austin campus with a new semiconductor lab.",date:"2026-02-15",source:"https://news.crunchbase.com/venture/all-time-high-funding-to-austin-startups-2025-ai-robotics-manufacturing/",sourceName:"Crunchbase News",contact:"Site/Campus Communications lead",contactTitle:"Corporate comms / employer-brand",guess:true,linkedin:"https://www.linkedin.com/search/results/people/?keywords=Arm%20Austin%20communications",reason:"Campus expansion and new-lab openings drive recruiting and facility-tour video needs (employer-brand films, ribbon-cutting coverage). Worth a local-presence pitch.",priority:"low"},
+        {company:"Hanyang (Hanyang ENG)",city:"Austin",industry:"manufacturing",type:"news",detail:"Korea's Hanyang ENG plans a new Austin manufacturing facility (~$14M investment) per Texas project announcements.",date:"2026-03-01",source:"https://gov.texas.gov/business/page/recent-project-announcements",sourceName:"Office of the TX Governor",contact:"U.S. operations / marketing lead",contactTitle:"Operations/marketing lead",guess:true,linkedin:"https://www.linkedin.com/search/results/people/?keywords=Hanyang%20ENG%20Austin",reason:"A foreign manufacturer establishing an Austin facility needs a U.S.-market introduction and capabilities/facility video. Smaller investment, so lower priority, but a clean cold-outreach reason.",priority:"low"},
+        {company:"County Technology Conference 2026",city:"Austin",industry:"conference",type:"conference",detail:"Government/tech conference at the Renaissance Austin Hotel, Oct 27–30, 2026; registration cost not listed (check Texas Association of Counties).",date:"2026-10-27",source:"https://www.county.org/education-and-events/calendar-of-events/2026/2026-county-technology-conference/overview",sourceName:"TX Assoc. of Counties",contact:"Conference organizer",contactTitle:"Event organizer",guess:true,linkedin:"",reason:"Public-sector tech vendors exhibit here and need demo/booth videos; David could target exhibitors or pitch event-coverage services.",priority:"low"},
+        {company:"Austin CTO Club",city:"Austin",industry:"networking event",type:"event",detail:"Tech-leadership meetup for Austin CTOs and engineering leaders; listed Wed Jul 15, 2026 at 6:30 PM CDT.",date:"2026-07-15",source:"https://www.austintechevents.com/",sourceName:"Austin Tech Events",contact:"Group organizer (host)",contactTitle:"Meetup organizer",guess:true,linkedin:"",reason:"Rooms full of senior tech decision-makers whose companies buy product/demo video; a high-signal room even though CTOs aren't the direct buyer — good for warm intros to marketing.",priority:"low"},
+        {company:"39th Annual Technology Law Conference",city:"Austin",industry:"conference",type:"conference",detail:"UT Law CLE technology-law conference; individual registration $895 (group rates $805 for 5+, $715 for 10+).",date:"2026-05-28",source:"https://utcle.org/conferences/PC26/",sourceName:"UT Law CLE",contact:"UT Law CLE conference staff",contactTitle:"Event organizer",guess:true,linkedin:"",reason:"Draws tech-company general counsel and executives — a peripheral but real networking venue. Lower priority for direct video sales.",priority:"low"}
+      ]
+    }
+  },
+  archive: [
+    // Populated automatically each morning: the prior day's report is pushed here as { date, reps: { nathan:[...], david:[...] } }.
+  ]
+};
+
+/* ---------- rendering ---------- */
+const TYPE_LABEL = {funding:"Funding",leadership:"Leadership",news:"News",event:"Event",conference:"Conference"};
+let activeTab = "tech";
+let filter = "all";
+let query = "";
+
+function daysAgo(d){
+  const ms = Date.now()-new Date(d+"T12:00:00").getTime();
+  const days = Math.round(ms/86400000);
+  if (days<=0) return "today";
+  if (days===1) return "1 day ago";
+  if (days<31) return days+" days ago";
+  const mo = Math.round(days/30); return mo+(mo===1?" month ago":" months ago");
+}
+function contactHTML(s){
+  const nm = s.guess ? `${s.contact} <span class="guess">(role — verify)</span>` : `<b>${s.contact}</b>`;
+  const li = s.linkedin ? `<a class="li" href="${s.linkedin}" target="_blank" rel="noopener">in ↗</a>` : "";
+  const title = s.contactTitle ? ` · ${s.contactTitle}` : "";
+  return `Contact: ${nm}${title}${li}`;
+}
+function cardHTML(s){
+  return `<div class="card ${s.priority}">
+    <div class="chead">
+      <span class="company">${s.company}</span>
+      <span class="loc">· ${s.city}</span>
+      <span class="badges">
+        <span class="badge b-${s.type}">${TYPE_LABEL[s.type]||s.type}</span>
+        <span class="pri ${s.priority}">${({hi:"HIGH",med:"MED",low:"LOW"})[s.priority]}</span>
+      </span>
+    </div>
+    <span class="ind">${s.industry}</span>
+    <div class="detail">${s.detail}</div>
+    <div class="reason"><span class="lbl">Why reach out now</span>${s.reason}</div>
+    <div class="foot">
+      <span class="contact">${contactHTML(s)}</span>
+      <span class="srcrow">${s.date} · ${daysAgo(s.date)} · <a href="${s.source}" target="_blank" rel="noopener">${s.sourceName} ↗</a></span>
+    </div>
+  </div>`;
+}
+
+function renderTabs(){
+  const el = document.getElementById("tabs");
+  const repTabs = Object.keys(DATA.reps).map(k=>{
+    const r = DATA.reps[k];
+    return `<button class="tab ${activeTab===k?'active':''}" data-tab="${k}">
+      ${r.name}<span class="tsub">${r.territory.split('—')[0].trim()}</span></button>`;
+  }).join("");
+  const archTab = `<button class="tab ${activeTab==='archive'?'active':''}" data-tab="archive">
+    Archive<span class="tsub">Past daily reports</span></button>`;
+  el.innerHTML = repTabs + archTab;
+  el.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>{
+    activeTab = t.dataset.tab; filter="all"; query="";
+    const qb=document.getElementById("q"); if(qb) qb.value="";
+    document.querySelectorAll(".controls .chip").forEach(c=>c.classList.toggle("active",c.dataset.f==="all"));
+    try{localStorage.setItem("rainmaker_tab",activeTab);}catch(e){}
+    renderTabs(); renderMain();
+  }));
+}
+
+function renderStats(sigs){
+  const el = document.getElementById("stats");
+  const hi = sigs.filter(s=>s.priority==="hi").length;
+  const fund = sigs.filter(s=>s.type==="funding").length;
+  const lead = sigs.filter(s=>s.type==="leadership").length;
+  el.innerHTML = `
+    <div class="stat"><div class="n acc">${sigs.length}</div><div class="l">Live signals</div></div>
+    <div class="stat"><div class="n hi">${hi}</div><div class="l">High priority</div></div>
+    <div class="stat"><div class="n">${fund}</div><div class="l">Funding events</div></div>
+    <div class="stat"><div class="n">${lead}</div><div class="l">Leadership changes</div></div>`;
+}
+
+function renderMain(){
+  const repView = document.getElementById("repView");
+  const archView = document.getElementById("archiveView");
+  if (activeTab==="archive"){
+    repView.style.display="none"; archView.style.display="block"; renderArchive(); return;
+  }
+  repView.style.display="block"; archView.style.display="none";
+  const sigs = DATA.reps[activeTab].signals.slice();
+  renderStats(sigs);
+  const rows = sigs.filter(s=>{
+    if(["funding","leadership","news","event"].includes(filter)){
+      if(filter==="event"){ if(s.type!=="event"&&s.type!=="conference") return false; }
+      else if(s.type!==filter) return false;
+    }
+    if(filter==="hi" && s.priority!=="hi") return false;
+    if(query){
+      const hay=(s.company+" "+s.industry+" "+s.detail+" "+s.contact+" "+s.city).toLowerCase();
+      if(!hay.includes(query)) return false;
+    }
+    return true;
+  }).sort((a,b)=>{
+    const p={hi:0,med:1,low:2};
+    if(p[a.priority]!==p[b.priority]) return p[a.priority]-p[b.priority];
+    return new Date(b.date)-new Date(a.date);
+  });
+  const list=document.getElementById("list");
+  list.innerHTML = rows.length ? rows.map(cardHTML).join("") : '<div class="empty">No signals match this filter.</div>';
+}
+
+function renderArchive(){
+  const el=document.getElementById("archiveList");
+  if(!DATA.archive.length){
+    el.innerHTML = `<div class="empty">No archived reports yet.<br><br>Each weekday morning, the current report is snapshotted here before the new one loads — so you'll always be able to look back at previous days' signals for every rep.</div>`;
+    return;
+  }
+  el.innerHTML = DATA.archive.slice().sort((a,b)=>new Date(b.date)-new Date(a.date)).map((day,i)=>{
+    const total = Object.values(day.reps).reduce((n,arr)=>n+arr.length,0);
+    const body = Object.keys(day.reps).map(rk=>{
+      const name = DATA.reps[rk] ? DATA.reps[rk].name : rk;
+      return `<div class="arch-rep">${name}</div>` + (day.reps[rk].length?day.reps[rk].map(cardHTML).join(""):'<div class="empty">No signals.</div>');
+    }).join("");
+    return `<div class="arch-day ${i===0?'open':''}">
+      <div class="arch-head"><span class="arch-caret">▸</span><span class="arch-date">${day.date}</span><span class="arch-meta">${total} signals</span></div>
+      <div class="arch-body">${body}</div>
+    </div>`;
+  }).join("");
+  el.querySelectorAll(".arch-head").forEach(h=>h.addEventListener("click",()=>h.parentElement.classList.toggle("open")));
+}
+
+document.querySelectorAll(".controls .chip").forEach(c=>c.addEventListener("click",()=>{
+  document.querySelectorAll(".controls .chip").forEach(x=>x.classList.remove("active"));
+  c.classList.add("active"); filter=c.dataset.f; renderMain();
+}));
+document.getElementById("q").addEventListener("input",e=>{query=e.target.value.toLowerCase().trim();renderMain();});
+
+document.getElementById("gen").textContent = new Date(DATA.generated+"T12:00:00").toLocaleDateString(undefined,{weekday:"long",month:"long",day:"numeric",year:"numeric"});
+try{const t=localStorage.getItem("rainmaker_tab"); if(t&&(DATA.reps[t]||t==="archive")) activeTab=t;}catch(e){}
+renderTabs(); renderMain();
+</script>
+</body>
+</html>
